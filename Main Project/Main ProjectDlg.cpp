@@ -7,10 +7,7 @@
 #include<opencv2/objdetect/objdetect.hpp>
 #include<conio.h>
 #include<chrono>
-#include <Windows.h>
-extern "C++" {
-#include <Powrprof.h>
-}
+
 #pragma comment(lib, "Powrprof.lib")
 #include "pch.h"
 #include "framework.h"
@@ -250,16 +247,9 @@ void CMainProjectDlg::OnBnClickedButton1()
 		if (Clock::now() > timeLimit )
 		{
 
-			if (m_listBox.GetCurSel() == 0)
-			{
-				
-				BlinkScreen();
-			}
-			else
-			{
-				
-				warnningMsg();
-			}
+			::MessageBox(NULL, L"You have seen on screen more than 20 minutes. \nIt's good to give a rest to your eyes", L"Warnning!", MB_ICONWARNING);
+			Beep(523, 500);
+			cout << '\a';
 			destroyAllWindows();
 			check = 0;
 			timeLimit = Clock::now() + delayT2;
