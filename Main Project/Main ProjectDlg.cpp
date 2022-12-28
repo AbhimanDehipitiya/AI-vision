@@ -63,6 +63,7 @@ END_MESSAGE_MAP()
 
 CMainProjectDlg::CMainProjectDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_MAIN_PROJECT_DIALOG, pParent)
+	, m_checkBoxVal(FALSE)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -71,6 +72,8 @@ void CMainProjectDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST1, m_listBox);
+	DDX_Control(pDX, IDC_CHECK1, m_checkBoxControl);
+	DDX_Check(pDX, IDC_CHECK1, m_checkBoxVal);
 }
 
 BEGIN_MESSAGE_MAP(CMainProjectDlg, CDialogEx)
@@ -83,6 +86,8 @@ BEGIN_MESSAGE_MAP(CMainProjectDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON3, &CMainProjectDlg::OnBnClickedButton3)
 	ON_BN_CLICKED(IDC_BUTTON2, &CMainProjectDlg::OnBnClickedButton2)
 	ON_BN_CLICKED(IDC_BUTTON5, &CMainProjectDlg::OnBnClickedButton5)
+	ON_EN_CHANGE(IDC_EDIT1, &CMainProjectDlg::OnEnChangeEdit1)
+	ON_BN_CLICKED(IDC_CHECK1, &CMainProjectDlg::OnBnClickedCheck1)
 END_MESSAGE_MAP()
 
 
@@ -199,8 +204,8 @@ void CMainProjectDlg::OnBnClickedButton1()
 	size_t z = 0;
 	int check = 0;
 	
-	auto delayT1 = 1s;
-	auto delayT2 = 20s;
+	auto delayT1 = 10s;
+	auto delayT2 = 10s;
 	auto timePaused = Clock::now() + delayT1;
 	auto timeLimit = Clock::now() + delayT2;
 	while (1) {
@@ -246,10 +251,14 @@ void CMainProjectDlg::OnBnClickedButton1()
 
 		if (Clock::now() > timeLimit )
 		{
-
-			::MessageBox(NULL, L"You have seen on screen more than 20 minutes. \nIt's good to give a rest to your eyes", L"Warnning!", MB_ICONWARNING);
+			if (turnOff == 1)
+			{
+				BlinkScreen();
+			}
+			::MessageBox(NULL, L"You have seen on screen more than 20 minutes. \nIt's good to give a rest for your eyes", L"Warnning!", MB_ICONWARNING);
 			Beep(523, 500);
 			cout << '\a';
+			
 			destroyAllWindows();
 			check = 0;
 			timeLimit = Clock::now() + delayT2;
@@ -302,7 +311,6 @@ void CMainProjectDlg::OnBnClickedButton4()
 void CMainProjectDlg::BlinkScreen()
 {
 	// Turn off monitor
-	
 	::SendMessage(HWND_BROADCAST, WM_SYSCOMMAND, SC_MONITORPOWER, (LPARAM)2);
 	Sleep(500); // Eliminate user's interaction for 500 ms
 	// Turn on monitor
@@ -323,5 +331,34 @@ void CMainProjectDlg::warnningMsg()
 
 void CMainProjectDlg::OnBnClickedButton5()
 {
-	BlinkScreen();
+	if (turnOff == 1)
+	{
+		BlinkScreen();
+	}
+	
+}
+
+
+void CMainProjectDlg::OnEnChangeEdit1()
+{
+	// TODO:  If this is a RICHEDIT control, the control will not
+	// send this notification unless you override the CDialogEx::OnInitDialog()
+	// function and call CRichEditCtrl().SetEventMask()
+	// with the ENM_CHANGE flag ORed into the mask.
+
+	// TODO:  Add your control notification handler code here
+}
+
+
+void CMainProjectDlg::OnBnClickedCheck1()
+{
+	UpdateData(TRUE);
+	if (m_checkBoxVal)
+	{
+		turnOff = 1;
+	}
+	else
+	{
+		turnOff = 0;
+	}
 }

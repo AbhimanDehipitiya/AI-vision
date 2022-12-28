@@ -49,7 +49,11 @@ public:
 	int show = 0;
 	int x_axis;//Declaring integer variables to store co-ordinate values//
 	int y_axis;//Declaring integer variables to store co-ordinate values//
+	int turnOff = 0;
 	
 	
-	
+	afx_msg void OnEnChangeEdit1();
+	CButton m_checkBoxControl;
+	afx_msg void OnBnClickedCheck1();
+	BOOL m_checkBoxVal;
 };
