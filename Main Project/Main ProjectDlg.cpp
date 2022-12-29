@@ -64,7 +64,10 @@ END_MESSAGE_MAP()
 CMainProjectDlg::CMainProjectDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_MAIN_PROJECT_DIALOG, pParent)
 	, m_checkBoxVal(FALSE)
+	, m_editVal(_T(""))
+	, m_listVal(_T(""))
 {
+	m_editVal += "CMainProjectDlg-Constructor\r\n";
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
@@ -74,6 +77,9 @@ void CMainProjectDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LIST1, m_listBox);
 	DDX_Control(pDX, IDC_CHECK1, m_checkBoxControl);
 	DDX_Check(pDX, IDC_CHECK1, m_checkBoxVal);
+	DDX_Control(pDX, IDC_EDIT1, m_editControl);
+	DDX_Text(pDX, IDC_EDIT1, m_editVal);
+	DDX_LBString(pDX, IDC_LIST1, m_listVal);
 }
 
 BEGIN_MESSAGE_MAP(CMainProjectDlg, CDialogEx)
@@ -125,9 +131,9 @@ BOOL CMainProjectDlg::OnInitDialog()
 	// TODO: Add extra initialization here
 	CString str = _T("");
 
-		str.Format(_T("Blink Screen"));
+		str.Format(_T("Education mode"));
 		m_listBox.AddString(str);
-		str.Format(_T("Warning"));
+		str.Format(_T("Regular mode"));
 		m_listBox.AddString(str);
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
@@ -152,6 +158,7 @@ void CMainProjectDlg::OnSysCommand(UINT nID, LPARAM lParam)
 
 void CMainProjectDlg::OnPaint()
 {
+	
 	if (IsIconic())
 	{
 		CPaintDC dc(this); // device context for painting
@@ -186,6 +193,10 @@ HCURSOR CMainProjectDlg::OnQueryDragIcon()
 
 void CMainProjectDlg::OnBnClickedButton1()
 {
+	if (mode == 1)
+	{
+		m_editVal += "OnBnClickedButton1-Function\r\n"; UpdateData(FALSE);
+	}
 	Mat frame;//Declaring a matrix to video frame in it//
 	namedWindow("Detect");//Declaring a window to show our work//
 	destroyAllWindows();
@@ -286,10 +297,30 @@ void CMainProjectDlg::OnBnClickedButton1()
 void CMainProjectDlg::OnLbnSelchangeList1()
 {
 	
+	
+	UpdateData(TRUE);
+	if (m_listVal == "Education mode")
+	{
+		mode = 1;
+		m_editVal += "Education mode\r\n";
+		UpdateData(FALSE);
+	}
+	else
+	{
+		mode = 2;
+		m_editVal += "Regular mode\r\n";
+		UpdateData(FALSE);
+	}
+	
 }
 
 void CMainProjectDlg::OnBnClickedButton2()
 {
+	if (mode == 1)
+	{
+		m_editVal += "OnBnClickedButton2-Function\r\n"; UpdateData(FALSE);
+	}
+	
 	terminate = 1;
 }
 
@@ -298,30 +329,40 @@ void CMainProjectDlg::OnBnClickedButton2()
 
 void CMainProjectDlg::OnBnClickedButton3()
 {
+	if (mode == 1)
+	{
+		m_editVal += "OnBnClickedButton3-Function\r\n"; UpdateData(FALSE);
+	}
+	
 	show = 1;
 }
 
 
 void CMainProjectDlg::OnBnClickedButton4()
 {
+	if (mode == 1)
+	{
+		m_editVal += "OnBnClickedButton4-Function\r\n"; UpdateData(FALSE);
+	}
+	
 	show = 0;
 	destroyAllWindows();
 }
 
 void CMainProjectDlg::BlinkScreen()
 {
+	if (mode == 1)
+	{
+		m_editVal += "BlinkScreen-Function\r\n"; UpdateData(FALSE);
+	}
+	
 	// Turn off monitor
 	::SendMessage(HWND_BROADCAST, WM_SYSCOMMAND, SC_MONITORPOWER, (LPARAM)2);
 	Sleep(500); // Eliminate user's interaction for 500 ms
 	// Turn on monitor
 	::SendMessage(HWND_BROADCAST, WM_SYSCOMMAND, SC_MONITORPOWER, (LPARAM)-1);
 
-	// Low power monitor
-	//Sleep(500); // Eliminate user's interaction for 500 ms
-	//::SendMessage(HWND_BROADCAST, WM_SYSCOMMAND, SC_MONITORPOWER, (LPARAM)1);
-	/*HDC hDC = GetDC();
-	BitBlt(hDC, 0, 0, width, height, NULL, 0, 0, BLACKNESS);
-	ReleaseDC(NULL, hDC);*/
+	
 }
 
 void CMainProjectDlg::warnningMsg()
@@ -331,6 +372,11 @@ void CMainProjectDlg::warnningMsg()
 
 void CMainProjectDlg::OnBnClickedButton5()
 {
+	if (mode == 1)
+	{
+		m_editVal += "OnBnClickedButton5-Function\r\n"; UpdateData(FALSE);
+	}
+	
 	if (turnOff == 1)
 	{
 		BlinkScreen();
@@ -352,6 +398,7 @@ void CMainProjectDlg::OnEnChangeEdit1()
 
 void CMainProjectDlg::OnBnClickedCheck1()
 {
+	
 	UpdateData(TRUE);
 	if (m_checkBoxVal)
 	{
@@ -360,5 +407,10 @@ void CMainProjectDlg::OnBnClickedCheck1()
 	else
 	{
 		turnOff = 0;
+	}
+
+	if (mode == 1)
+	{
+		m_editVal += "OnBnClickedCheck1-Function\r\n"; UpdateData(FALSE);
 	}
 }

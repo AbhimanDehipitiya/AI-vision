@@ -50,10 +50,13 @@ public:
 	int x_axis;//Declaring integer variables to store co-ordinate values//
 	int y_axis;//Declaring integer variables to store co-ordinate values//
 	int turnOff = 0;
-	
+	int mode = 2;
 	
 	afx_msg void OnEnChangeEdit1();
 	CButton m_checkBoxControl;
 	afx_msg void OnBnClickedCheck1();
 	BOOL m_checkBoxVal;
+	CEdit m_editControl;
+	CString m_editVal;
+	CString m_listVal;
 };
