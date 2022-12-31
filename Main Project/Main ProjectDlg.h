@@ -43,7 +43,6 @@ public:
 	afx_msg void OnBnClickedButton5(); // help button
 	afx_msg void OnLbnSelchangeList1();
 	void BlinkScreen();
-	void warnningMsg();
 	CListBox m_listBox;
 	int terminate = 0;
 	int show = 0;

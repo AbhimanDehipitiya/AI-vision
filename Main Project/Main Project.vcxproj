@@ -213,6 +213,8 @@
     <None Include="res\MainProject.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="ai.png" />
+    <Image Include="res\bitmap1.bmp" />
     <Image Include="res\Main Project.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

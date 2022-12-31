@@ -159,6 +159,7 @@ void CMainProjectDlg::OnSysCommand(UINT nID, LPARAM lParam)
 void CMainProjectDlg::OnPaint()
 {
 	
+	
 	if (IsIconic())
 	{
 		CPaintDC dc(this); // device context for painting
@@ -175,6 +176,7 @@ void CMainProjectDlg::OnPaint()
 
 		// Draw the icon
 		dc.DrawIcon(x, y, m_hIcon);
+		
 	}
 	else
 	{
@@ -191,58 +193,58 @@ HCURSOR CMainProjectDlg::OnQueryDragIcon()
 
 
 
-void CMainProjectDlg::OnBnClickedButton1()
+void CMainProjectDlg::OnBnClickedButton1() // function for start button
 {
 	if (mode == 1)
 	{
 		m_editVal += "OnBnClickedButton1-Function\r\n"; UpdateData(FALSE);
 	}
-	Mat frame;//Declaring a matrix to video frame in it//
-	namedWindow("Detect");//Declaring a window to show our work//
+	Mat frame;//Declaring a matrix to video frame in it
+	namedWindow("Detect");//Declaring a window to show our work
 	destroyAllWindows();
-	VideoCapture image(0);//capturing video from default camera//
-	if (!image.isOpened()) { //Error message if video source is not found//
-		cout << "Couldn't load video from the source.Make sure your camera is working properly." << endl;
-		system("pause");
+	VideoCapture image(0);//capturing video from default camera
+	if (!image.isOpened()) { //Error message if video source is not found
+		::MessageBox(NULL, L"Couldn't load video from the source.\nMake sure your camera is working properly.", L"Warnning!", MB_ICONWARNING);
+		return;
 		
 	}
-	double height = image.set(CAP_PROP_FRAME_HEIGHT, 480);//setting up height of each frame//
-	double width = image.set(CAP_PROP_FRAME_WIDTH, 640);//setting up width of each frame//
-	CascadeClassifier face_cascade, eyes_cascade;//declaring a CascadeClassifier object//
+	double height = image.set(CAP_PROP_FRAME_HEIGHT, 480);//setting up height of each frame
+	double width = image.set(CAP_PROP_FRAME_WIDTH, 640);//setting up width of each frame
+	CascadeClassifier face_cascade, eyes_cascade;//declaring a CascadeClassifier object
 	face_cascade.load("C:/opencv/sources/data/haarcascades/haarcascade_frontalface_alt.xml");//loading the cascade classifier//
 	eyes_cascade.load("C:/opencv/sources/data/haarcascades/haarcascade_eye.xml");
-	//system("cls");
+
 	size_t z = 0;
 	int check = 0;
 	
-	auto delayT1 = 10s;
-	auto delayT2 = 10s;
-	auto timePaused = Clock::now() + delayT1;
-	auto timeLimit = Clock::now() + delayT2;
+	auto delayT1 = 20s;
+	auto delayT2 = 1200s;
+	auto timePaused = Clock::now() + delayT1; // assing the delayT1 + time at now to timePaused
+	auto timeLimit = Clock::now() + delayT2; // assing the delayT2 + time at now to timeLimit
 	while (1) {
-		bool temp = image.read(frame);//loading video frames from source to our matrix named frame//
+		bool temp = image.read(frame);//loading video frames from source to our matrix named frame
 		std::vector<Rect>faces;//Declaring a vector named faces//
 		face_cascade.detectMultiScale(frame, faces, 1.1, 2, 0 | CASCADE_SCALE_IMAGE, Size(100, 100));//detecting the face
-		z = faces.size();
+		z = faces.size(); // assing number of faces detected to z
 		for (int i = 0; i < faces.size(); i++) { //for locating the face
-			Point center(faces[i].x + faces[i].width * 0.5, faces[i].y + faces[i].height * 0.5);//getting the center of the face//
-			ellipse(frame, center, Size(faces[i].width * 0.5, faces[i].height * 0.5), 0, 0, 360, Scalar(255, 0, 255), 4, 8, 0);//draw an ellipse on the face//
-			Mat faceROI = frame(faces[i]);//Taking area of the face as Region of Interest for eyes//
-			std::vector<Rect> eyes;//declaring a vector named eyes//
-			eyes_cascade.detectMultiScale(faceROI, eyes, 1.1, 2, 0 | CASCADE_SCALE_IMAGE, Size(5, 5));//detect eyes in every face//
-			z = eyes.size();
-			for (size_t j = 0; j < eyes.size(); j++) { //for locating eyes//
-				Point center(faces[i].x + eyes[j].x + eyes[j].width * 0.5, faces[i].y + eyes[j].y + eyes[j].height * 0.5);//getting the centers of both eyes//
-				int radius = cvRound((eyes[j].width + eyes[j].height) * 0.25);//declaring radius of the eye enclosing circles//
-				circle(frame, center, radius, Scalar(255, 0, 0), 4, 8, 0);//drawing circle around both eyes//
-				x_axis = eyes[j].x;//storing x axis location of eyes in x_axis//
-				y_axis = eyes[j].y;//storing y axis location of eyes in y_axis//
-				//cout << "Position of the eyes is:" << "(" << x_axis << "," << y_axis << ")" << faces.size() << " " << eyes.size() << endl;//showing co-ordinate values//
+			Point center(faces[i].x + faces[i].width * 0.5, faces[i].y + faces[i].height * 0.5);//getting the center of the face
+			ellipse(frame, center, Size(faces[i].width * 0.5, faces[i].height * 0.5), 0, 0, 360, Scalar(255, 0, 255), 4, 8, 0);//draw an ellipse on the face
+			Mat faceROI = frame(faces[i]);//Taking area of the face as Region of Interest for eyes
+			std::vector<Rect> eyes;//declaring a vector named eyes
+			eyes_cascade.detectMultiScale(faceROI, eyes, 1.1, 2, 0 | CASCADE_SCALE_IMAGE, Size(5, 5));//detect eyes in every face
+			z = eyes.size(); // assing number of eyes detected to z
+			for (size_t j = 0; j < eyes.size(); j++) { //for locating eyes
+				Point center(faces[i].x + eyes[j].x + eyes[j].width * 0.5, faces[i].y + eyes[j].y + eyes[j].height * 0.5);//getting the centers of both eyes
+				int radius = cvRound((eyes[j].width + eyes[j].height) * 0.25);//declaring radius of the eye enclosing circles
+				circle(frame, center, radius, Scalar(255, 0, 0), 4, 8, 0);//drawing circle around both eyes
+				x_axis = eyes[j].x;//storing x axis location of eyes in x_axis
+				y_axis = eyes[j].y;//storing y axis location of eyes in y_axis
+				
 			}
 		}
-		if ((z == 0) && (check == 0))
+		if ((z == 0) && (check == 0)) // if there are no any face detected
 		{
-			timePaused = Clock::now() + delayT1;
+			timePaused = Clock::now() + delayT1; // assing the delayT1 + time at now to timePaused
 			check = 1;
 		}
 		else if (z != 0)
@@ -251,28 +253,34 @@ void CMainProjectDlg::OnBnClickedButton1()
 		}
 		if (check == 1)
 		{
-			if (Clock::now() > timePaused)
+			if (Clock::now() > timePaused) // this check how much time any face have not been detected 
 			{
-				destroyAllWindows();
+				destroyAllWindows(); // close the capturing window
 				check = 0;
-				timeLimit = Clock::now() + delayT2;
+				timeLimit = Clock::now() + delayT2; // assing the delayT2 + time at now to timeLimit
 			}
 			
 		}
 
-		if (Clock::now() > timeLimit )
+		if (Clock::now() > timeLimit ) // check wheather the time limit for the face detection has exceed 
 		{
+			int answer;
 			if (turnOff == 1)
 			{
-				BlinkScreen();
+				BlinkScreen(); // turn off the screen for a moment
 			}
-			::MessageBox(NULL, L"You have seen on screen more than 20 minutes. \nIt's good to give a rest for your eyes", L"Warnning!", MB_ICONWARNING);
-			Beep(523, 500);
-			cout << '\a';
-			
+			Beep(523, 500); // beep sound
+			cout << '\a'; // beep sound
+			// wwarning message
+			answer = ::MessageBox(NULL, L"You have seen on screen more than 20 minutes. It's good to give a rest for your eyes. Do you want to take a rest?", L"Warnning!", MB_YESNO | MB_ICONWARNING);
+			if (answer == IDYES)
+			{
+				Sleep(20);
+			}
 			destroyAllWindows();
 			check = 0;
-			timeLimit = Clock::now() + delayT2;
+			timeLimit = Clock::now() + delayT2; // assing the delayT2 + time at now to timeLimit
+			
 		}
 
 		if (show == 1)
@@ -280,21 +288,21 @@ void CMainProjectDlg::OnBnClickedButton1()
 			imshow("Detect", frame);//showing result in window named 'Detect'//
 		}
 		
-		if (waitKey(10) == 27) { //wait time for each frame is 30 milliseconds//
+		if (waitKey(10) == 27) { //wait time for each frame is 10 milliseconds//
 			break;
 		}
-		if (terminate == 1)
+		if (terminate == 1) // terminate the loop
 		{
 			terminate = 0;
 			break;
 		}
 		
 	}
-	destroyAllWindows();
+	destroyAllWindows(); // close the capturing window
 }
 
 
-void CMainProjectDlg::OnLbnSelchangeList1()
+void CMainProjectDlg::OnLbnSelchangeList1() // check what is selected at the list box
 {
 	
 	
@@ -302,19 +310,26 @@ void CMainProjectDlg::OnLbnSelchangeList1()
 	if (m_listVal == "Education mode")
 	{
 		mode = 1;
-		m_editVal += "Education mode\r\n";
+		m_editVal += "OnLbnSelchangeList1-Function\r\nEducation mode\r\n";
 		UpdateData(FALSE);
 	}
 	else
 	{
+		if (mode == 1)
+		{
+			m_editVal += "OnLbnSelchangeList1-Function\r\nRegular mode\r\n";
+		}
+		else
+		{
+			m_editVal += "Regular mode\r\n";
+		}
 		mode = 2;
-		m_editVal += "Regular mode\r\n";
 		UpdateData(FALSE);
 	}
 	
 }
 
-void CMainProjectDlg::OnBnClickedButton2()
+void CMainProjectDlg::OnBnClickedButton2() // function for stop button
 {
 	if (mode == 1)
 	{
@@ -327,7 +342,7 @@ void CMainProjectDlg::OnBnClickedButton2()
 
 
 
-void CMainProjectDlg::OnBnClickedButton3()
+void CMainProjectDlg::OnBnClickedButton3() // function for capture button
 {
 	if (mode == 1)
 	{
@@ -338,7 +353,7 @@ void CMainProjectDlg::OnBnClickedButton3()
 }
 
 
-void CMainProjectDlg::OnBnClickedButton4()
+void CMainProjectDlg::OnBnClickedButton4() // funcion for close button
 {
 	if (mode == 1)
 	{
@@ -349,7 +364,7 @@ void CMainProjectDlg::OnBnClickedButton4()
 	destroyAllWindows();
 }
 
-void CMainProjectDlg::BlinkScreen()
+void CMainProjectDlg::BlinkScreen() // function to turn off screen
 {
 	if (mode == 1)
 	{
@@ -365,22 +380,10 @@ void CMainProjectDlg::BlinkScreen()
 	
 }
 
-void CMainProjectDlg::warnningMsg()
-{
 
-}
-
-void CMainProjectDlg::OnBnClickedButton5()
+void CMainProjectDlg::OnBnClickedButton5() // function for help button
 {
-	if (mode == 1)
-	{
-		m_editVal += "OnBnClickedButton5-Function\r\n"; UpdateData(FALSE);
-	}
-	
-	if (turnOff == 1)
-	{
-		BlinkScreen();
-	}
+	::MessageBox(NULL, L"Start button - start the timer\r\nStop button - stop the timer\r\nCapture button - show the camera and how face is detecting (to use this timer should be started)\r\nClose button - close the capturing window\r\nCheck box - if you want to turn off the screen when the timer is alerting, use this\r\nList Box :\r\nEducation mode - show the the functons and classes which run\r\nRegular mode - run normally", L"User Manual", MB_ICONQUESTION);
 	
 }
 
@@ -396,15 +399,15 @@ void CMainProjectDlg::OnEnChangeEdit1()
 }
 
 
-void CMainProjectDlg::OnBnClickedCheck1()
+void CMainProjectDlg::OnBnClickedCheck1() // function for check box
 {
 	
 	UpdateData(TRUE);
-	if (m_checkBoxVal)
+	if (m_checkBoxVal) // if the check box is with tick
 	{
 		turnOff = 1;
 	}
-	else
+	else // if the check box is without tick
 	{
 		turnOff = 0;
 	}
