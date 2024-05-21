@@ -23,8 +23,13 @@ managing their work time with AI assisted reminder software.
 TECHNOLOGY:
 
 C++
+
 OpenCV
+
 Object Oriented Programming
+
+In this project we have developed a GUI application that can detect blinking of eyes and count how much time he/she
+has directly focused on the screen and alert it to the user.
 
 
 
