@@ -1,4 +1,5 @@
-INTRODUCTION
+INTRODUCTION:
+
 In modern world all most all the people use computer to do their work such as professional work,
 education work and day-to-day work. Therefore, people have to have work Infront of computer for a
 considerable portion of time from a day. Even though computers help to simplify our work there are
@@ -6,7 +7,8 @@ some injuries due to the overuse of computers. Among them we are going to consid
 related injuries and came up with a solution to avoid Digital related eye strain with the assistance of
 software as a mini project.
 
-OBJECTIVE
+OBJECTIVE:
+
 20-20-20 rule is an effective way to handle Digital Eye Strain. But it not practical to follow this rule
 without any timing assistance. Further it is not practical to use timers and set the time manually to get
 a reminder for once every twenty minutes.
@@ -18,7 +20,8 @@ managing their work time with AI assisted reminder software.
 
 ![op](https://github.com/AbhimanDehipitiya/AI-vision/assets/119153381/a2b972bf-dfdc-4de6-bcf5-18aec8996286)
 
-TECHNOLOGY
+TECHNOLOGY:
+
 C++
 OpenCV
 Object Oriented Programming
